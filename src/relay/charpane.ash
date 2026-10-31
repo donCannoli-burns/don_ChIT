@@ -2,6 +2,7 @@ script "Character Information Toolbox";
 since r29302; // Shield Maiden blessing tracking
 import "zlib.ash";
 import "chit_global.ash";
+import "chit_donReport.ash";
 import "chit_itemInfo.ash";
 import "chit_familiarInfo.ash";
 import "chit_effectInfo.ash";
@@ -30,6 +31,8 @@ chit_setvar("chit.character.title", true);
 chit_setvar("chit.clan.display", "away"); // Valid values are on,off,away. Away will only display clan if chit.clan.home is not blank.
 chit_setvar("chit.clan.home", "");
 chit_setvar("chit.disable", false);
+chit_setvar("chit.don.capture.enabled", false); // AND KoLFix global+source gates; no writer
+chit_setvar("chit.don.print.enabled", false); // opt-in summary only, no raw relay capture
 chit_setvar("chit.display.popovers", true);
 chit_setvar("chit.familiar.anti-gollywog", true);
 chit_setvar("chit.familiar.hiddengear", "");
@@ -4842,6 +4845,7 @@ buffer modifyPage(buffer source) {
 }
 
 void main() {
+	chit_don_capture_if_enabled(); // gated cached read only, never writes
 	// some shenanigans to get notify to work for people who already notified Bale
 	// and just in general because it's broken for relay override scripts seemingly
 	if(!property_exists("chit.notifyShenanigans.done")) {
