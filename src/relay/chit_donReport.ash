@@ -25,6 +25,8 @@ void chit_don_capture_if_enabled()
     return;
   if(get_property("donReport_source_chit") != "true")
     return;
+  if(cvars["chit.disable"] == "true")
+    return; // Honor the original ChIT relay override OFF switch.
   if(cvars["chit.don.capture.enabled"] != "true")
     return;
 
