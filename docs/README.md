@@ -438,3 +438,8 @@ Bale also wants to offer thanks to:
 - ckb who wrote the tracker brick and added display and parsing for effects descriptions
 - soolar who wrote the amazing gear Brick
 - Many other people who have inspired and assisted me in with this project in ways that are hard to quantify
+
+## Don Report v1 — optional cached relay observation
+
+The forked ChIT override retains `charpane.ash` and its original `chit.disable` switch. It adds two settings, `chit.don.capture.enabled` and `chit.don.print.enabled`, both **false** by default. A cached local snapshot is only collected when `donReport_collectionEnabled`, `donReport_relayCaptureEnabled`, `donReport_source_chit` and `chit.don.capture.enabled` are all true **and ChIT itself is not disabled**. Even then it is volatile and local only; a short human-readable summary is printed only when the additional `chit.don.print.enabled` and `donReport_printChanges` preferences are both true. No raw relay HTML, JSON file, Kmail, game command, change hook, or `spadingScript` replacement is performed. Permanent recording requires the separate [KoLFix writer gate](https://github.com/donCannoli-burns/don_kolfix/blob/main/docs/don-report-v1.md).
+
