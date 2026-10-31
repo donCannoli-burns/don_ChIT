@@ -1,0 +1,36 @@
+name: Don Report ChIT helper KoLmafia compile-only
+on:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+      - name: Download test KoLmafia
+        run: |
+          curl -L --fail --silent --show-error -o KoLmafia-29334.jar \
+            https://github.com/kolmafia/kolmafia/releases/download/r29334/KoLmafia-29334.jar
+      - name: Compile injected ChIT observer in isolated test profile only
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/.kolmafia/scripts"
+          cp src/relay/chit_donReport.ash "$HOME/.kolmafia/scripts/"
+          cat > "$HOME/.kolmafia/scripts/chit_don_report_compile.ash" <<'EOF'
+          string [string] cvars;
+          import "chit_donReport.ash";
+          void main() {}
+          EOF
+          cat > "$HOME/.kolmafia/scripts/__verify.txt" <<'EOF'
+          verify chit_don_report_compile.ash
+          exit
+          EOF
+          cd "$HOME/.kolmafia"
+          timeout 90s java -jar "$GITHUB_WORKSPACE/KoLmafia-29334.jar" --CLI __verify.txt > "$GITHUB_WORKSPACE/verify.log" 2>&1 || true
+          cat "$GITHUB_WORKSPACE/verify.log"
+          test "$(grep -Fc 'Script verification complete.' "$GITHUB_WORKSPACE/verify.log" || true)" -eq 1
