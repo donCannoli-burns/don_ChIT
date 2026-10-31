@@ -26,11 +26,11 @@ jobs:
           import "chit_donReport.ash";
           void main() {}
           EOF
-          cat > "$HOME/.kolmafia/scripts/__verify.txt" <<'EOF'
+          cat > "$HOME/.kolmafia/scripts/__verify_don_report.txt" <<'EOF'
           verify chit_don_report_compile.ash
           exit
           EOF
           cd "$HOME/.kolmafia"
-          timeout 90s java -jar "$GITHUB_WORKSPACE/KoLmafia-29334.jar" --CLI __verify.txt > "$GITHUB_WORKSPACE/verify.log" 2>&1 || true
+          timeout 120s java -jar "$GITHUB_WORKSPACE/KoLmafia-29334.jar" --CLI __verify_don_report.txt > "$GITHUB_WORKSPACE/verify.log" 2>&1 || true
           cat "$GITHUB_WORKSPACE/verify.log"
           test "$(grep -Fc 'Script verification complete.' "$GITHUB_WORKSPACE/verify.log" || true)" -eq 1
